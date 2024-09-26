@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block contents %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mt-5 border-bottom">
+    <h1>問題を選択してください</h1>
+</div>
+
+<ul>
+    {% for question in questions %}
+    <li><a href="{% url 'quiz:question' question.pk %}">{{ question.title }}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

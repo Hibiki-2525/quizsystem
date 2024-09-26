@@ -1,0 +1,32 @@
+/* quiz/static/quiz/style.css */
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.answer-area {
+    width: 45%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    min-height: 500px;
+}
+
+.card-area {
+    width: 45%;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.card {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    cursor: grab;
+}
+
+.drop-area {
+    border: 2px dashed #ccc;
+    min-height: 150px;
+    padding: 10px;
+}
