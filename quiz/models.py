@@ -11,6 +11,13 @@ class Question(models.Model):
     # 正解をリスト形式で返すヘルパーメソッド
     def get_correct_answer_list(self):
         return self.correct_answer.split('|')  # 区切り文字としてパイプを使用
+    
+class Card(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='cards')
+    text = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.text
 
 class UserAnswer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)

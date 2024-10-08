@@ -1,20 +1,21 @@
-/* quiz/static/quiz/style.css */
 .container {
     display: flex;
     justify-content: space-between;
 }
 
-.answer-area {
+.card-area, .answer-area {
     width: 45%;
-    border: 1px solid #ccc;
+    border: 3px solid #ccc;
     padding: 10px;
-    min-height: 500px;
+    min-height: 250px;  /* 高さを設定してカードをドロップできるようにする */
+}
+
+.answer-area {
+    background-color: #e0f7fa;
 }
 
 .card-area {
-    width: 45%;
-    border: 1px solid #ccc;
-    padding: 10px;
+    background-color: #e0f7fa;
 }
 
 .card {
@@ -22,11 +23,21 @@
     padding: 10px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
-    cursor: grab;
+    cursor: move;
 }
 
-.drop-area {
-    border: 2px dashed #ccc;
-    min-height: 150px;
+.answer-box {
+    border: 1px solid #98e19b;  /* 緑色の枠を太めに設定 */
+    min-height: 200px;          /* ドロップエリアの最低高さ */
     padding: 10px;
+    background-color: #fff;     /* 背景色を白に設定 */
+    border-radius: 10px;        /* 角を丸くする */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);  /* 軽い影をつけて浮き上がる感じに */
+}
+
+#submit-button {
+    display: block;          /* ブロック要素にして配置を制御しやすく */
+    margin-top: 20px;
+    margin-left: auto;       /* 左の余白を自動にして右寄せ */
+    margin-right: 0;         /* 右の余白をゼロにする（必要に応じて調整） */
 }
