@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Question
 from django.views import View  
+from .card_generator import generate_cards_from_db
   
 class SampleView(View):  
 	def get(self, request, *args, **kwargs):  
@@ -18,74 +19,21 @@ def question_view(request, pk):
     cards = question.cards.all()  # カードを取得
     return render(request, 'quiz/question.html', {'question': question, 'cards': cards})
 
-# 回答送信
-#def submit_answer(request, pk):
-    question = get_object_or_404(Question, pk=pk)
+def create_question_and_generate_cards(request):
     if request.method == 'POST':
-        user_answer = request.POST.get('answer')  # ユーザーの回答を取得
-        # 正解をリストとして取得
-        correct_answer = question.get_correct_answer_list()
-        # ユーザーの回答をリスト化して正誤を判定
-        user_answer_list = user_answer.split(', ')
-        if user_answer_list == correct_answer:
-            result = "正解です！"
-        else:
-            result = "不正解です！"
-        return render(request, 'quiz/result.html', {'result': result})
-    return redirect('quiz:question', pk=pk)
+        # フォームからデータを受け取って新しい問題を作成
+        question_text = request.POST.get('text')
+        correct_code = request.POST.get('correct_code')
 
-# 回答送信
-#def submit_answer(request, pk):
-    question = get_object_or_404(Question, pk=pk)
-    if request.method == 'POST':
-        user_answer = request.POST.get('answer')  # ユーザーの回答を取得
-        correct_answer = question.get_correct_answer_list()  # 正解をリストとして取得
-        user_answer_list = user_answer.split(', ')  # ユーザーの回答をリスト化
+        question = Question.objects.create(text=question_text, correct_code=correct_code)
 
-        # 各行ごとの正誤判定
-        result_list = []
-        for user_ans, correct_ans in zip(user_answer_list, correct_answer):
-            if user_ans == correct_ans:
-                result_list.append('◯')
-            else:
-                result_list.append('✕')
+        # カードを生成してDBに保存
+        generate_cards_from_db(question.id)
 
-        # 3つのリストをまとめたリストを作成
-        combined_list = zip(user_answer_list, correct_answer, result_list)
+        # 作成が終わったらホームページにリダイレクト
+        return redirect('quiz:home')
 
-        # 行ごとの判定結果をテンプレートに渡す
-        return render(request, 'quiz/result.html', {
-            'combined_list': combined_list
-        })
-
-    return redirect('quiz:question', pk=pk)
-
-
-#def submit_answer(request, pk):
-    question = get_object_or_404(Question, pk=pk)
-    if request.method == 'POST':
-        user_answer = request.POST.get('answer')  # ユーザーの回答を取得
-        # 正解をリストとして取得
-        correct_answer = question.get_correct_answer_list()
-        # ユーザーの回答をリスト化して正誤を判定
-        user_answer_list = user_answer.split(', ')
-        if user_answer_list == correct_answer:
-            result = "正解です！"
-        else:
-            result = "不正解です！"
-
-        # 次の問題を取得
-        try:
-            next_question = Question.objects.filter(pk__gt=question.pk).order_by('pk').first()
-            if next_question:
-                return redirect('quiz:question', pk=next_question.pk)
-            else:
-                return render(request, 'quiz/result.html', {'result': result, 'user_answer': user_answer_list, 'correct_answer': correct_answer})
-        except Question.DoesNotExist:
-            return redirect('quiz:home')  # エラーの場合もホームにリダイレクト
-
-    return redirect('quiz:question', pk=pk)
-
+    return render(request, 'quiz/create_question.html')
 
 # 回答送信
 def submit_answer(request, pk):

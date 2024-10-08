@@ -19,8 +19,8 @@
 
     <div id="card-container" class="card-area">
         <h3>カード</h3>
-        {% for card in cards %}
-        <div class="card">{{ card.text }}</div>
+        {% for card in question.cards.all %}
+        <div class="card">{{ card.card_text }}</div>
         {% endfor %}
     </div>
 </div>
