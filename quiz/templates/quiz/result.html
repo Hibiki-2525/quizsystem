@@ -1,8 +1,22 @@
 {% extends 'base.html' %}
 {% block contents %}
+<body>
+    <h1>結果</h1>
+    <table border="1">
+        <tr>
+            <th>問題番号</th>
+            <th>結果</th>
+        </tr>
+        {% for result in results %}
+        <tr>
+            <td>問題 {{ result.question_number }}</td>
+            <td>{{ result.result }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'quiz:home' %}">ホームに戻る</a>
+</body>
 
-<h1>{{ result }}</h1>
-<a href="{% url 'quiz:home' %}">ホームに戻る</a>
 
 
 {% endblock %}

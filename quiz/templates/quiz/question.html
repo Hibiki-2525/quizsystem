@@ -3,33 +3,33 @@
 {% load static %}
 <head>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
-<h1>{{ question.title }}</h1>
+<body>
+<h1>問題 {{ question.pk }}</h1>
 <p>{{ question.text }}</p>
 <div class="container">
     <div class="answer-area">
         <h3>解答欄</h3>
         <!-- ドラッグしたカードがここに入る -->
-        <div id="drop-area" class="drop-area">
+        <div id="answer-box" class="answer-box">
             <!-- ここにドラッグして解答を入力 -->
         </div>
     </div>
 
-    <div class="card-area">
+    <div id="card-container" class="card-area">
         <h3>カード</h3>
-        <div class="card" draggable="true" id="card1">if(a>b)</div>
-        <div class="card" draggable="true" id="card2">temp = a</div>
-        <div class="card" draggable="true" id="card3">a = b</div>
-        <div class="card" draggable="true" id="card4">b = temp</div>
-        <div class="card" draggable="true" id="card5">b = a</div>
+        {% for card in question.cards.all %}
+        <div class="card">{{ card.card_text }}</div>
+        {% endfor %}
     </div>
 </div>
-
 <form id="answer-form" method="post" action="{% url 'quiz:submit_answer' question.pk %}">
     {% csrf_token %}
     <input type="hidden" id="answer-input" name="answer" value="">
-    <button type="submit">回答を送信</button>
+    <button type="submit" id="submit-button">次へ</button>
 </form>
-<script src="{% static 'js/script.js' %}"></script>
 
+<script src="{% static 'js/script.js' %}"></script>
+</body>
 {% endblock %}

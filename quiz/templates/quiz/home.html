@@ -6,7 +6,7 @@
 
 <ul>
     {% for question in questions %}
-    <li><a href="{% url 'quiz:question' question.pk %}">{{ question.title }}</a></li>
+    <li><a href="{% url 'quiz:question' question.pk %}">問題{{ question.pk }}</a></li>
     {% endfor %}
 </ul>
 

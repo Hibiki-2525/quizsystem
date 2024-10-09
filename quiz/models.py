@@ -1,16 +1,25 @@
 from django.db import models
 
 class Question(models.Model):
-    title = models.CharField(max_length=255)
-    text = models.TextField(default='default question text') # 問題文
-    correct_answer = models.TextField() 
+    title = models.CharField(max_length=200)  # 問題のタイトル（例：問1）
+    text = models.TextField()  # 問題文を保存
+    correct_code = models.TextField()  # 正解のコード（複数行で保存）
 
-    def __str__(self):
-        return self.title
-
-    # 正解をリスト形式で返すヘルパーメソッド
     def get_correct_answer_list(self):
-        return self.correct_answer.split('|')  # 区切り文字としてパイプを使用
+        # 正解コードを行ごとに分割してリストにする
+        return self.correct_code.strip().split('\n')
+
+    
+def generate_cards_from_code(correct_code):
+    lines = correct_code.strip().split('\n')  # コードを行ごとに分割
+    return lines
+
+
+class Card(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='cards')  # ここでrelated_nameを追加
+    card_text = models.CharField(max_length=255)  # カードに表示するコードの一部
+
+
 
 class UserAnswer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
